@@ -157,7 +157,65 @@ a{text-decoration:none;}
     </div>
     <div class="widget-wrap">
       <div class="widget-top"><h2>🔍 Search Flights</h2><div class="secure-tag">🔒 Safe &amp; Secure Booking</div></div>
-      <iframe src="https://www.jetradar.com/flights/?marker=711217&locale=en&powered_by=true" width="100%" height="520" frameborder="0" scrolling="no" style="border-radius:12px;min-height:520px;"></iframe>
+      <!-- FLIGHT SEARCH WIDGET -->
+<style>
+.fsw{background:linear-gradient(135deg,#0d1535,#0a1228);border:1px solid rgba(0,198,255,0.2);border-radius:16px;padding:28px 32px;max-width:980px;margin:0 auto;}
+.fsw-tabs{display:flex;gap:8px;margin-bottom:24px;}
+.fsw-tab{padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);background:transparent;transition:all 0.2s;}
+.fsw-tab.active{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;border-color:transparent;}
+.fsw-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:end;}
+.fsw-field{display:flex;flex-direction:column;gap:6px;}
+.fsw-field label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;}
+.fsw-field input,.fsw-field select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;}
+.fsw-field input:focus,.fsw-field select:focus{border-color:#00c6ff;}
+.fsw-field input::placeholder{color:rgba(255,255,255,0.25);}
+.fsw-field select option{background:#0d1535;color:#fff;}
+.fsw-btn{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;font-family:inherit;}
+.fsw-btn:hover{opacity:0.88;}
+.fsw-pax{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap;}
+.fsw-pax label{font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;}
+.fsw-pax select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;}
+.fsw-pax select option{background:#0d1535;}
+@media(max-width:700px){.fsw-row{grid-template-columns:1fr 1fr;gap:10px;}.fsw-btn{grid-column:1/-1;width:100%;}.fsw{padding:20px 16px;}}
+</style>
+<div class="fsw">
+  <div class="fsw-tabs">
+    <button class="fsw-tab active" onclick="setTab('roundtrip',this)">&#8596; Round Trip</button>
+    <button class="fsw-tab" onclick="setTab('oneway',this)">&#8594; One Way</button>
+  </div>
+  <div class="fsw-row">
+    <div class="fsw-field"><label>From</label><input type="text" id="fsw-origin" placeholder="e.g. NYC" /></div>
+    <div class="fsw-field"><label>To</label><input type="text" id="fsw-dest" placeholder="e.g. LAX" /></div>
+    <div class="fsw-field"><label>Depart</label><input type="date" id="fsw-depart" /></div>
+    <div class="fsw-field" id="fsw-return-wrap"><label>Return</label><input type="date" id="fsw-return" /></div>
+    <button class="fsw-btn" onclick="searchFlights()">&#128269; Search Flights</button>
+  </div>
+  <div class="fsw-pax">
+    <label>Adults:</label>
+    <select id="fsw-adults"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+    <label>Class:</label>
+    <select id="fsw-class"><option value="Y">Economy</option><option value="C">Business</option><option value="F">First</option></select>
+  </div>
+</div>
+<script>
+var fsw_trip="roundtrip";
+function setTab(t,el){fsw_trip=t;document.querySelectorAll(".fsw-tab").forEach(function(b){b.classList.remove("active");});el.classList.add("active");document.getElementById("fsw-return-wrap").style.display=t==="oneway"?"none":"";}
+function searchFlights(){
+  var o=document.getElementById("fsw-origin").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
+  var d=document.getElementById("fsw-dest").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
+  var dep=document.getElementById("fsw-depart").value;
+  var ret=document.getElementById("fsw-return").value;
+  var adults=document.getElementById("fsw-adults").value;
+  var cls=document.getElementById("fsw-class").value;
+  if(!o||!d||!dep){alert("Please fill in From, To, and Depart date.");return;}
+  var df=dep.replace(/-/g,"");
+  var url;
+  if(fsw_trip==="roundtrip"&&ret){var rf=ret.replace(/-/g,"");url="https://www.aviasales.com/search/"+o+df+d+rf+adults+cls+"0?marker=711217";}
+  else{url="https://www.aviasales.com/search/"+o+df+d+adults+cls+"1?marker=711217";}
+  window.open(url,"_blank");
+}
+(function(){var t=new Date();var dep=new Date(t);dep.setDate(dep.getDate()+14);var ret=new Date(t);ret.setDate(ret.getDate()+21);function fmt(d){return d.toISOString().split("T")[0];}document.getElementById("fsw-depart").value=fmt(dep);document.getElementById("fsw-return").value=fmt(ret);})();
+</script>
     </div>
   </div>
 </section>
