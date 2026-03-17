@@ -157,14 +157,14 @@ a{text-decoration:none;}
     </div>
     <div class="widget-wrap">
       <div class="widget-top"><h2>🔍 Search Flights</h2><div class="secure-tag">🔒 Safe &amp; Secure Booking</div></div>
-      <!-- FLIGHT SEARCH WIDGET -->
+      <!-- FLIGHT SEARCH WIDGET v3 - with airport autocomplete -->
 <style>
 .fsw{background:linear-gradient(135deg,#0d1535,#0a1228);border:1px solid rgba(0,198,255,0.2);border-radius:16px;padding:28px 32px;max-width:980px;margin:0 auto;}
 .fsw-tabs{display:flex;gap:8px;margin-bottom:24px;}
 .fsw-tab{padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);background:transparent;transition:all 0.2s;}
 .fsw-tab.active{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;border-color:transparent;}
 .fsw-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:end;}
-.fsw-field{display:flex;flex-direction:column;gap:6px;}
+.fsw-field{display:flex;flex-direction:column;gap:6px;position:relative;}
 .fsw-field label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;}
 .fsw-field input,.fsw-field select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;}
 .fsw-field input:focus,.fsw-field select:focus{border-color:#00c6ff;}
@@ -176,19 +176,36 @@ a{text-decoration:none;}
 .fsw-pax label{font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;}
 .fsw-pax select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;}
 .fsw-pax select option{background:#0d1535;}
+.ac-list{position:absolute;top:100%;left:0;right:0;background:#111d3a;border:1px solid rgba(0,198,255,0.3);border-radius:10px;z-index:999;max-height:220px;overflow-y:auto;margin-top:4px;display:none;}
+.ac-list.open{display:block;}
+.ac-item{padding:10px 14px;cursor:pointer;font-size:13px;color:#fff;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item.selected{background:rgba(0,198,255,0.1);}
+.ac-code{background:rgba(0,198,255,0.15);color:#00c6ff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;flex-shrink:0;}
+.ac-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 @media(max-width:700px){.fsw-row{grid-template-columns:1fr 1fr;gap:10px;}.fsw-btn{grid-column:1/-1;width:100%;}.fsw{padding:20px 16px;}}
 </style>
 <div class="fsw">
   <div class="fsw-tabs">
-    <button class="fsw-tab active" onclick="setTab('roundtrip',this)">&#8596; Round Trip</button>
-    <button class="fsw-tab" onclick="setTab('oneway',this)">&#8594; One Way</button>
+    <button class="fsw-tab active" onclick="fswSetTab('roundtrip',this)">&#8596; Round Trip</button>
+    <button class="fsw-tab" onclick="fswSetTab('oneway',this)">&#8594; One Way</button>
   </div>
   <div class="fsw-row">
-    <div class="fsw-field"><label>From</label><input type="text" id="fsw-origin" placeholder="e.g. NYC" /></div>
-    <div class="fsw-field"><label>To</label><input type="text" id="fsw-dest" placeholder="e.g. LAX" /></div>
+    <div class="fsw-field">
+      <label>From</label>
+      <input type="text" id="fsw-origin-txt" placeholder="City or airport..." autocomplete="off" oninput="fswAC(this,'fsw-origin-list','fsw-origin-code')" onfocus="fswAC(this,'fsw-origin-list','fsw-origin-code')" />
+      <input type="hidden" id="fsw-origin-code" />
+      <div class="ac-list" id="fsw-origin-list"></div>
+    </div>
+    <div class="fsw-field">
+      <label>To</label>
+      <input type="text" id="fsw-dest-txt" placeholder="City or airport..." autocomplete="off" oninput="fswAC(this,'fsw-dest-list','fsw-dest-code')" onfocus="fswAC(this,'fsw-dest-list','fsw-dest-code')" />
+      <input type="hidden" id="fsw-dest-code" />
+      <div class="ac-list" id="fsw-dest-list"></div>
+    </div>
     <div class="fsw-field"><label>Depart</label><input type="date" id="fsw-depart" /></div>
     <div class="fsw-field" id="fsw-return-wrap"><label>Return</label><input type="date" id="fsw-return" /></div>
-    <button class="fsw-btn" onclick="searchFlights()">&#128269; Search Flights</button>
+    <button class="fsw-btn" onclick="fswSearch()">&#9992; Search Flights</button>
   </div>
   <div class="fsw-pax">
     <label>Adults:</label>
@@ -198,11 +215,31 @@ a{text-decoration:none;}
   </div>
 </div>
 <script>
-var fsw_trip="roundtrip";
-function setTab(t,el){fsw_trip=t;document.querySelectorAll(".fsw-tab").forEach(function(b){b.classList.remove("active");});el.classList.add("active");document.getElementById("fsw-return-wrap").style.display=t==="oneway"?"none":"";}
-function searchFlights(){
-  var o=document.getElementById("fsw-origin").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
-  var d=document.getElementById("fsw-dest").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
+var fswTrip="roundtrip";
+var fswAirports=[
+  ["JFK","New York (John F. Kennedy)","US"],["LGA","New York (LaGuardia)","US"],["EWR","Newark","US"],["LAX","Los Angeles","US"],["ORD","Chicago O'Hare","US"],["MDW","Chicago Midway","US"],["ATL","Atlanta","US"],["DFW","Dallas/Fort Worth","US"],["DEN","Denver","US"],["SFO","San Francisco","US"],["SEA","Seattle","US"],["LAS","Las Vegas","US"],["MIA","Miami","US"],["FLL","Fort Lauderdale","US"],["MCO","Orlando","US"],["BOS","Boston","US"],["PHX","Phoenix","US"],["IAH","Houston Intercontinental","US"],["HOU","Houston Hobby","US"],["MSP","Minneapolis","US"],["DTW","Detroit","US"],["PHL","Philadelphia","US"],["CLT","Charlotte","US"],["SLC","Salt Lake City","US"],["BWI","Baltimore","US"],["DCA","Washington Reagan","US"],["IAD","Washington Dulles","US"],["PDX","Portland","US"],["SAN","San Diego","US"],["TPA","Tampa","US"],["HNL","Honolulu","US"],["ANC","Anchorage","US"],["NYC","New York (All)","US"],["CHI","Chicago (All)","US"],["WAS","Washington DC (All)","US"],["LON","London (All)","UK"],["LHR","London Heathrow","UK"],["LGW","London Gatwick","UK"],["STN","London Stansted","UK"],["CDG","Paris Charles de Gaulle","FR"],["ORY","Paris Orly","FR"],["PAR","Paris (All)","FR"],["AMS","Amsterdam","NL"],["FRA","Frankfurt","DE"],["MUC","Munich","DE"],["BER","Berlin","DE"],["MAD","Madrid","ES"],["BCN","Barcelona","ES"],["FCO","Rome Fiumicino","IT"],["MXP","Milan Malpensa","IT"],["ZRH","Zurich","CH"],["VIE","Vienna","AT"],["BRU","Brussels","BE"],["CPH","Copenhagen","DK"],["ARN","Stockholm","SE"],["HEL","Helsinki","FI"],["OSL","Oslo","NO"],["DUB","Dublin","IE"],["LIS","Lisbon","PT"],["ATH","Athens","GR"],["IST","Istanbul","TR"],["DXB","Dubai","AE"],["AUH","Abu Dhabi","AE"],["DOH","Doha","QA"],["KWI","Kuwait City","KW"],["RUH","Riyadh","SA"],["JED","Jeddah","SA"],["BOM","Mumbai","IN"],["DEL","Delhi","IN"],["BLR","Bangalore","IN"],["MAA","Chennai","IN"],["CCU","Kolkata","IN"],["HYD","Hyderabad","IN"],["AMD","Ahmedabad","IN"],["COK","Kochi","IN"],["PNQ","Pune","IN"],["SIN","Singapore","SG"],["KUL","Kuala Lumpur","MY"],["BKK","Bangkok Suvarnabhumi","TH"],["DMK","Bangkok Don Mueang","TH"],["CGK","Jakarta","ID"],["MNL","Manila","PH"],["SGN","Ho Chi Minh City","VN"],["HAN","Hanoi","VN"],["PEK","Beijing","CN"],["PVG","Shanghai Pudong","CN"],["CAN","Guangzhou","CN"],["HKG","Hong Kong","HK"],["ICN","Seoul Incheon","KR"],["NRT","Tokyo Narita","JP"],["HND","Tokyo Haneda","JP"],["KIX","Osaka","JP"],["SYD","Sydney","AU"],["MEL","Melbourne","AU"],["BNE","Brisbane","AU"],["PER","Perth","AU"],["AKL","Auckland","NZ"],["YYZ","Toronto","CA"],["YVR","Vancouver","CA"],["YUL","Montreal","CA"],["YYC","Calgary","CA"],["GRU","Sao Paulo","BR"],["GIG","Rio de Janeiro","BR"],["EZE","Buenos Aires","AR"],["BOG","Bogota","CO"],["LIM","Lima","PE"],["MEX","Mexico City","MX"],["CUN","Cancun","MX"],["JNB","Johannesburg","ZA"],["CPT","Cape Town","ZA"],["NBO","Nairobi","KE"],["CAI","Cairo","EG"],["CMN","Casablanca","MA"],["ADD","Addis Ababa","ET"]
+];
+function fswAC(inp,listId,codeId){
+  var q=inp.value.toLowerCase().trim();
+  var list=document.getElementById(listId);
+  if(q.length<2){list.classList.remove("open");return;}
+  var matches=fswAirports.filter(function(a){return a[0].toLowerCase().includes(q)||a[1].toLowerCase().includes(q)||a[2].toLowerCase().includes(q);}).slice(0,8);
+  if(!matches.length){list.classList.remove("open");return;}
+  list.innerHTML=matches.map(function(a){return'<div class="ac-item" onclick="fswPick(\''+(listId)+'\',\''+(codeId)+'\',\''+a[0]+'\',\''+a[1].replace(/\'/g,"")+'\')">'+'<span class="ac-code">'+a[0]+'</span><span class="ac-name">'+a[1]+' '+a[2]+'</span></div>';}).join("");
+  list.classList.add("open");
+}
+function fswPick(listId,codeId,code,name){
+  var list=document.getElementById(listId);
+  var txtId=listId.replace("-list","-txt");
+  document.getElementById(txtId).value=name+" ("+code+")";
+  document.getElementById(codeId).value=code;
+  list.classList.remove("open");
+}
+document.addEventListener("click",function(e){if(!e.target.closest(".fsw-field")){document.querySelectorAll(".ac-list").forEach(function(l){l.classList.remove("open");});}});
+function fswSetTab(t,el){fswTrip=t;document.querySelectorAll(".fsw-tab").forEach(function(b){b.classList.remove("active");});el.classList.add("active");document.getElementById("fsw-return-wrap").style.display=t==="oneway"?"none":"";}
+function fswSearch(){
+  var o=document.getElementById("fsw-origin-code").value||document.getElementById("fsw-origin-txt").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
+  var d=document.getElementById("fsw-dest-code").value||document.getElementById("fsw-dest-txt").value.trim().toUpperCase().replace(/[^A-Z]/g,"").substring(0,3);
   var dep=document.getElementById("fsw-depart").value;
   var ret=document.getElementById("fsw-return").value;
   var adults=document.getElementById("fsw-adults").value;
@@ -210,7 +247,7 @@ function searchFlights(){
   if(!o||!d||!dep){alert("Please fill in From, To, and Depart date.");return;}
   var df=dep.replace(/-/g,"");
   var url;
-  if(fsw_trip==="roundtrip"&&ret){var rf=ret.replace(/-/g,"");url="https://www.aviasales.com/search/"+o+df+d+rf+adults+cls+"0?marker=711217";}
+  if(fswTrip==="roundtrip"&&ret){var rf=ret.replace(/-/g,"");url="https://www.aviasales.com/search/"+o+df+d+rf+adults+cls+"0?marker=711217";}
   else{url="https://www.aviasales.com/search/"+o+df+d+adults+cls+"1?marker=711217";}
   window.open(url,"_blank");
 }
