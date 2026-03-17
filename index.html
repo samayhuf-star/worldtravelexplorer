@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cheap Flights & Travel Deals | World Travel Explorer</title>
+<meta name="description" content="World Travel Explorer — Search and book cheap flights from 500+ airlines. Best price guarantee, zero hidden fees, 24/7 support."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {--p1:#059669;--p2:#10b981;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#fff;line-height:1.6;}
+a{text-decoration:none;}
+.aff-bar{background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.07);padding:7px 40px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center;}
+.aff-bar a{color:var(--p2);}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:0 50px;height:70px;background:rgba(10,14,26,0.97);border-bottom:1px solid rgba(255,255,255,0.07);position:sticky;top:0;z-index:1000;backdrop-filter:blur(14px);}
+.logo{font-size:22px;font-weight:800;color:#fff;}
+.main-nav{display:flex;align-items:center;gap:4px;}
+.main-nav a{color:rgba(255,255,255,0.65);font-size:14px;font-weight:500;padding:8px 14px;border-radius:8px;transition:all 0.2s;}
+.main-nav a:hover,.main-nav a.active{color:#fff;background:rgba(255,255,255,0.07);}
+.header-actions{display:flex;align-items:center;gap:14px;}
+.iata-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;white-space:nowrap;}
+.header-phone{color:var(--p2);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--p2),var(--p1));color:#fff;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:700;transition:opacity 0.2s;white-space:nowrap;display:inline-block;}
+.btn-primary:hover{opacity:0.88;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+.mobile-nav{display:none;flex-direction:column;background:#0d1220;border-bottom:1px solid rgba(255,255,255,0.07);padding:12px 20px;}
+.mobile-nav a{color:rgba(255,255,255,0.7);font-size:15px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-weight:500;}
+.mobile-nav a:last-child{border-bottom:none;}
+.mobile-nav.open{display:flex;}
+.site-footer{background:#060a14;border-top:1px solid rgba(255,255,255,0.06);}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto;padding:60px 40px 40px;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;margin:14px 0 18px;}
+.footer-brand .phone-link{color:var(--p2);font-weight:700;font-size:14px;}
+.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+.footer-col a{display:block;color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:10px;transition:color 0.2s;}
+.footer-col a:hover{color:var(--p2);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding:20px 40px;text-align:center;font-size:12px;color:rgba(255,255,255,0.2);max-width:1200px;margin:0 auto;}
+.page-hero{background:linear-gradient(160deg,#060a18,#0a1535);padding:60px 40px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.07);}
+.page-hero h1{font-size:clamp(28px,4vw,48px);font-weight:800;margin-bottom:12px;}
+.page-hero h1 span{color:var(--p2);}
+.page-hero p{color:rgba(255,255,255,0.5);font-size:16px;max-width:560px;margin:0 auto;}
+.breadcrumb{font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+.breadcrumb a{color:var(--p2);}
+.content-section{max-width:900px;margin:0 auto;padding:60px 40px;}
+.content-section h2{font-size:21px;font-weight:700;margin:32px 0 12px;color:var(--p2);}
+.content-section h2:first-child{margin-top:0;}
+.content-section p,.content-section li{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:10px;}
+.content-section ul,.content-section ol{padding-left:22px;margin-bottom:12px;}
+.container{max-width:1200px;margin:0 auto;padding:0 40px;}
+.section{padding:80px 0;}
+.section-label{font-size:12px;font-weight:700;color:var(--p2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:block;}
+.section-title{font-size:clamp(26px,4vw,40px);font-weight:800;margin-bottom:12px;}
+.section-sub{color:rgba(255,255,255,0.45);font-size:15px;max-width:560px;}
+.cta-section{background:linear-gradient(135deg,var(--p1),var(--p2));padding:80px 40px;text-align:center;}
+.cta-section h2{font-size:clamp(24px,3vw,40px);font-weight:800;margin-bottom:14px;}
+.cta-section p{font-size:16px;color:rgba(255,255,255,0.85);margin-bottom:30px;max-width:480px;margin-left:auto;margin-right:auto;}
+.btn-white{background:#fff;color:var(--p1);padding:14px 36px;border-radius:10px;font-size:16px;font-weight:800;transition:transform 0.2s;display:inline-block;}
+.btn-white:hover{transform:scale(1.04);}
+@media(max-width:900px){
+  .site-header{padding:0 20px;}
+  .main-nav,.iata-pill,.btn-primary{display:none;}
+  .hamburger{display:flex;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .container{padding:0 20px;}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr;padding:40px 20px;}
+  .content-section{padding:40px 20px;}
+}
+</style>
+</head>
+<body>
+<div class="aff-bar">✈️ <strong>Affiliate Disclosure:</strong> We may earn a small commission when you book through our links — at no extra cost to you. <a href="privacy.html">Learn more</a></div>
+<header class="site-header">
+  <a href="index.html" class="logo">World Travel <span style="color:#10b981">Explorer</span></a>
+  <nav class="main-nav">
+    <a href="index.html" class="active">Home</a>
+    <a href="packages.html" >Tour Packages</a>
+    <a href="about.html" >About Us</a>
+    <a href="contact.html" >Contact</a>
+  </nav>
+  <div class="header-actions">
+    <span class="iata-pill">✔ IATA #14016398</span>
+    <a href="tel:+18556361066" class="header-phone">📞 (855) 636-1066</a>
+    <a href="tel:+18556361066" class="btn-primary">Book Now</a>
+  </div>
+  <div class="hamburger" onclick="document.getElementById('mNav').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+<nav class="mobile-nav" id="mNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="packages.html">🌍 Tour Packages</a>
+  <a href="about.html">ℹ️ About Us</a>
+  <a href="contact.html">📞 Contact Us</a>
+  <a href="privacy.html">🔒 Privacy Policy</a>
+  <a href="terms.html">📄 Terms &amp; Conditions</a>
+  <a href="refund.html">💳 Refund Policy</a>
+</nav>
+<style>
+.hero{background:linear-gradient(160deg,#060a18 0%,#0a1535 60%,#060c1e 100%);padding:90px 0 80px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(ellipse,rgba(0,114,255,0.12) 0%,transparent 70%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);font-size:13px;font-weight:600;padding:7px 18px;border-radius:50px;margin-bottom:28px;}
+.hero h1{font-size:clamp(36px,5vw,66px);font-weight:800;line-height:1.1;margin-bottom:18px;}
+.hero h1 span{color:#10b981;}
+.hero p{font-size:17px;color:rgba(255,255,255,0.55);max-width:560px;margin:0 auto 24px;line-height:1.8;}
+.trust-pills{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:44px;flex-wrap:wrap;}
+.trust-pill{display:flex;align-items:center;gap:7px;font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:7px 16px;border-radius:50px;}
+.trust-pill .chk{color:#10b981;}
+.widget-wrap{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px 36px 28px;max-width:980px;margin:0 auto;box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative;z-index:2;backdrop-filter:blur(8px);}
+.widget-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.widget-top h2{font-size:18px;font-weight:700;}
+.secure-tag{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-size:12px;font-weight:600;padding:4px 14px;border-radius:50px;}
+.stats-bar{background:#0d1220;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);}
+.stats-inner{display:flex;justify-content:center;max-width:1000px;margin:0 auto;}
+.stat-item{flex:1;text-align:center;padding:36px 20px;border-right:1px solid rgba(255,255,255,0.05);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:36px;font-weight:800;color:#10b981;}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,0.3);margin-top:4px;}
+.packages-section{background:#090d19;}
+.packages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-top:48px;}
+.pkg-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:transform 0.25s,border-color 0.25s;}
+.pkg-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,0.18);}
+.pkg-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:68px;background:linear-gradient(135deg,#0a1535,#0d1f3c);}
+.pkg-body{padding:22px;}
+.pkg-dest{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#10b981;margin-bottom:6px;}
+.pkg-title{font-size:17px;font-weight:700;margin-bottom:8px;}
+.pkg-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;margin-bottom:18px;}
+.pkg-foot{display:flex;align-items:center;justify-content:space-between;}
+.pkg-price{font-size:22px;font-weight:800;color:#10b981;}
+.pkg-price span{font-size:12px;font-weight:400;color:rgba(255,255,255,0.35);}
+.pkg-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:13px;font-weight:700;padding:8px 18px;border-radius:8px;transition:background 0.2s;}
+.pkg-btn:hover{background:rgba(255,255,255,0.13);}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:48px;}
+.feat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:28px;transition:border-color 0.2s,transform 0.2s;}
+.feat:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-3px);}
+.feat-ico{font-size:34px;margin-bottom:14px;}
+.feat-ttl{font-size:16px;font-weight:700;margin-bottom:8px;}
+.feat-dsc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;}
+@media(max-width:768px){.stats-inner{flex-wrap:wrap;}.stat-item{min-width:45%;}}
+</style>
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">✈️ Trusted by 3M+ Travelers · 500+ Airlines Compared</div>
+    <h1>Find &amp; Book <span>Cheap Flights</span><br/>Instantly</h1>
+    <p>Compare live fares from 500+ airlines worldwide. Best price guaranteed, zero hidden fees, and 24/7 expert travel support.</p>
+    <div class="trust-pills">
+      <div class="trust-pill"><span class="chk">✔</span> Lowest Fare Guarantee</div>
+      <div class="trust-pill"><span class="chk">✔</span> 24/7 Live Agents</div>
+      <div class="trust-pill"><span class="chk">✔</span> Secure &amp; Encrypted</div>
+      <div class="trust-pill"><span class="chk">✔</span> No Hidden Fees</div>
+    </div>
+    <div class="widget-wrap">
+      <div class="widget-top"><h2>🔍 Search Flights</h2><div class="secure-tag">🔒 Safe &amp; Secure Booking</div></div>
+      <script async src="https://tp.media/content?trs=711217&shmarker=711217&locale=en&powered_by=true&border_radius=8&plain=true&color_button=%23059669&color_button_text=%23ffffff&color_border=%2310b981&promo_id=4132&campaign_id=200" charset="utf-8"></script>
+    </div>
+  </div>
+</section>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-lbl">Airlines Compared</div></div>
+    <div class="stat-item"><div class="stat-num">3M+</div><div class="stat-lbl">Happy Travelers</div></div>
+    <div class="stat-item"><div class="stat-num">190+</div><div class="stat-lbl">Countries</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div>
+    <div class="stat-item"><div class="stat-num">$0</div><div class="stat-lbl">Booking Fees</div></div>
+  </div>
+</div>
+<section class="section packages-section">
+  <div class="container">
+    <span class="section-label">Tour Packages</span>
+    <div class="section-title">Popular <span style="color:#10b981">Travel Packages</span></div>
+    <div class="section-sub">Handpicked destinations with the best deals on flights, hotels &amp; activities</div>
+    <div class="packages-grid">
+      <div class="pkg-card"><div class="pkg-img">🗽</div><div class="pkg-body"><div class="pkg-dest">New York, USA</div><div class="pkg-title">New York City Explorer</div><div class="pkg-desc">5 nights in the city that never sleeps. Times Square, Central Park, Statue of Liberty and more.</div><div class="pkg-foot"><div class="pkg-price">$699 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+      <div class="pkg-card"><div class="pkg-img">🗼</div><div class="pkg-body"><div class="pkg-dest">Paris, France</div><div class="pkg-title">Paris Romantic Getaway</div><div class="pkg-desc">7 nights in the city of love. Eiffel Tower, Louvre Museum, Seine River cruise included.</div><div class="pkg-foot"><div class="pkg-price">$1,199 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+      <div class="pkg-card"><div class="pkg-img">🏝️</div><div class="pkg-body"><div class="pkg-dest">Bali, Indonesia</div><div class="pkg-title">Bali Paradise Retreat</div><div class="pkg-desc">6 nights in Bali's most stunning resorts. Temples, rice terraces &amp; pristine beaches.</div><div class="pkg-foot"><div class="pkg-price">$899 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+      <div class="pkg-card"><div class="pkg-img">🕌</div><div class="pkg-body"><div class="pkg-dest">Dubai, UAE</div><div class="pkg-title">Dubai Luxury Experience</div><div class="pkg-desc">5 nights of luxury. Burj Khalifa, desert safari, world-class dining included.</div><div class="pkg-foot"><div class="pkg-price">$1,099 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+      <div class="pkg-card"><div class="pkg-img">🗾</div><div class="pkg-body"><div class="pkg-dest">Tokyo, Japan</div><div class="pkg-title">Japan Cultural Journey</div><div class="pkg-desc">8 nights in Tokyo, Kyoto &amp; Osaka. Temples, sushi tours, Mount Fuji views.</div><div class="pkg-foot"><div class="pkg-price">$1,499 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+      <div class="pkg-card"><div class="pkg-img">🏔️</div><div class="pkg-body"><div class="pkg-dest">Swiss Alps, Switzerland</div><div class="pkg-title">Swiss Alps Adventure</div><div class="pkg-desc">6 nights in Switzerland. Skiing, Zurich city tour and breathtaking alpine scenery.</div><div class="pkg-foot"><div class="pkg-price">$1,799 <span>/ person</span></div><a href="contact.html" class="pkg-btn">Book Now</a></div></div></div>
+    </div>
+    <div style="text-align:center;margin-top:40px;"><a href="packages.html" class="btn-primary" style="padding:14px 36px;font-size:15px;">View All Packages →</a></div>
+  </div>
+</section>
+<section class="section" style="background:#0a0e1a;">
+  <div class="container">
+    <span class="section-label">Why Choose Us</span>
+    <div class="section-title">Travel Smarter with <span style="color:#10b981">World Travel Explorer</span></div>
+    <div class="features-grid">
+      <div class="feat"><div class="feat-ico">💰</div><div class="feat-ttl">Best Price Guaranteed</div><div class="feat-dsc">We search 500+ airlines simultaneously to guarantee you the lowest fare available anywhere online.</div></div>
+      <div class="feat"><div class="feat-ico">⚡</div><div class="feat-ttl">Instant Results</div><div class="feat-dsc">Real-time pricing in under 2 seconds. No outdated fares, no bait-and-switch.</div></div>
+      <div class="feat"><div class="feat-ico">🛡️</div><div class="feat-ttl">100% Secure Booking</div><div class="feat-dsc">256-bit SSL encryption on every transaction. Your data and payments are always protected.</div></div>
+      <div class="feat"><div class="feat-ico">🎧</div><div class="feat-ttl">24/7 Expert Support</div><div class="feat-dsc">Our travel agents are available around the clock — call, chat, or email anytime.</div></div>
+      <div class="feat"><div class="feat-ico">🌍</div><div class="feat-ttl">Global Coverage</div><div class="feat-dsc">10,000+ destinations across 190+ countries. Wherever you want to go, we'll get you there.</div></div>
+      <div class="feat"><div class="feat-ico">🔄</div><div class="feat-ttl">Flexible Options</div><div class="feat-dsc">One-way, round trip, or multi-city. Economy to first class. We cover every type of trip.</div></div>
+    </div>
+  </div>
+</section>
+<section class="cta-section">
+  <h2>Ready to Book Your Next Adventure?</h2>
+  <p>Call our travel experts now and get the best deals on flights and packages.</p>
+  <a href="tel:+18556361066" class="btn-white">📞 (855) 636-1066</a>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo" style="font-size:20px;font-weight:800;">World Travel <span style="color:#10b981">Explorer</span></a>
+      <p>Your trusted travel partner for finding the best flights worldwide. We compare 500+ airlines to get you the lowest fares with zero hidden fees.</p>
+      <a href="tel:+18556361066" class="phone-link">📞 (855) 636-1066</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="packages.html">Tour Packages</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="refund.html">Refund Policy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="contact.html">Help Center</a>
+      <a href="tel:+18556361066">Call Us</a>
+      <a href="mailto:support@worldtravelexplorer.online">Email Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 World Travel Explorer. All rights reserved. | IATA Licensed #14016398 | worldtravelexplorer.online</div>
+</footer>
+</body></html>
