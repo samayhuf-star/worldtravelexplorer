@@ -148,9 +148,9 @@ a{text-decoration:none;}
   <div class="container">
     <div class="hero-badge">✈️ Trusted by 3M+ Travelers · 500+ Airlines Compared</div>
     <h1>Find &amp; Book <span>Cheap Flights</span><br/>Instantly</h1>
-    <p>Compare live fares from 500+ airlines worldwide. Best price guaranteed, zero hidden fees, and 24/7 expert travel support.</p>
+    <p>Compare live fares from 500+ airlines worldwide. Competitive fares checked, zero hidden fees, and 24/7 expert travel support.</p>
     <div class="trust-pills">
-      <div class="trust-pill"><span class="chk">✔</span> Lowest Fare Guarantee</div>
+      <div class="trust-pill"><span class="chk">✔</span> Great Fare Finder</div>
       <div class="trust-pill"><span class="chk">✔</span> 24/7 Live Agents</div>
       <div class="trust-pill"><span class="chk">✔</span> Secure &amp; Encrypted</div>
       <div class="trust-pill"><span class="chk">✔</span> No Hidden Fees</div>
@@ -297,7 +297,7 @@ function fswSearch(){
     <span class="section-label">Why Choose Us</span>
     <div class="section-title">Travel Smarter with <span style="color:#10b981">World Travel Explorer</span></div>
     <div class="features-grid">
-      <div class="feat"><div class="feat-ico">💰</div><div class="feat-ttl">Best Price Guaranteed</div><div class="feat-dsc">We search 500+ airlines simultaneously to guarantee you the lowest fare available anywhere online.</div></div>
+      <div class="feat"><div class="feat-ico">💰</div><div class="feat-ttl">Competitive Price Promised</div><div class="feat-dsc">We search 500+ airlines simultaneously to search 500+ airlines to find you highly competitive fares.</div></div>
       <div class="feat"><div class="feat-ico">⚡</div><div class="feat-ttl">Instant Results</div><div class="feat-dsc">Real-time pricing in under 2 seconds. No outdated fares, no bait-and-switch.</div></div>
       <div class="feat"><div class="feat-ico">🛡️</div><div class="feat-ttl">100% Secure Booking</div><div class="feat-dsc">256-bit SSL encryption on every transaction. Your data and payments are always protected.</div></div>
       <div class="feat"><div class="feat-ico">🎧</div><div class="feat-ttl">24/7 Expert Support</div><div class="feat-dsc">Our travel agents are available around the clock — call, chat, or email anytime.</div></div>
@@ -340,4 +340,25 @@ function fswSearch(){
   </div>
   <div class="footer-bottom">&copy; 2026 World Travel Explorer. All rights reserved. | IATA Licensed #14016398 | worldtravelexplorer.online</div>
 </footer>
+
+<!-- Cookie Consent Banner -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#0d1220;border-top:1px solid rgba(255,255,255,0.12);padding:18px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;box-shadow:0 -4px 30px rgba(0,0,0,0.5);">
+  <div style="flex:1;min-width:220px;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;">
+    🍪 We use cookies to improve your experience, analyze traffic, and serve personalized ads via Google. By continuing, you agree to our <a href="privacy.html" style="color:#34d399;text-decoration:underline;">Privacy Policy</a>.
+  </div>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="acceptCookies()" style="background:linear-gradient(135deg,#34d399,#059669);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Accept All</button>
+    <button onclick="declineCookies()" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Decline</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(!localStorage.getItem('cookieConsent')){
+    document.getElementById('cookieBanner').style.display='flex';
+  }
+})();
+function acceptCookies(){localStorage.setItem('cookieConsent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('cookieConsent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
+
 </body></html>
