@@ -157,7 +157,7 @@ a{text-decoration:none;}
     </div>
     <div class="widget-wrap">
       <div class="widget-top"><h2>🔍 Search Flights</h2><div class="secure-tag">🔒 Safe &amp; Secure Booking</div></div>
-      <!-- FLIGHT SEARCH WIDGET v3 - with airport autocomplete -->
+      <!-- FLIGHT SEARCH WIDGET v4 - in-page iframe results -->
 <style>
 .fsw{background:linear-gradient(135deg,#0d1535,#0a1228);border:1px solid rgba(0,198,255,0.2);border-radius:16px;padding:28px 32px;max-width:980px;margin:0 auto;}
 .fsw-tabs{display:flex;gap:8px;margin-bottom:24px;}
@@ -180,10 +180,15 @@ a{text-decoration:none;}
 .ac-list.open{display:block;}
 .ac-item{padding:10px 14px;cursor:pointer;font-size:13px;color:#fff;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.05);}
 .ac-item:last-child{border-bottom:none;}
-.ac-item:hover,.ac-item.selected{background:rgba(0,198,255,0.1);}
+.ac-item:hover{background:rgba(0,198,255,0.1);}
 .ac-code{background:rgba(0,198,255,0.15);color:#00c6ff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;flex-shrink:0;}
 .ac-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-@media(max-width:700px){.fsw-row{grid-template-columns:1fr 1fr;gap:10px;}.fsw-btn{grid-column:1/-1;width:100%;}.fsw{padding:20px 16px;}}
+.fsw-results{margin-top:20px;border-radius:14px;overflow:hidden;display:none;}
+.fsw-results.visible{display:block;}
+.fsw-results iframe{width:100%;height:680px;border:none;display:block;border-radius:14px;}
+.fsw-loading{text-align:center;padding:40px 20px;color:rgba(255,255,255,0.5);font-size:15px;display:none;}
+.fsw-loading.visible{display:block;}
+@media(max-width:700px){.fsw-row{grid-template-columns:1fr 1fr;gap:10px;}.fsw-btn{grid-column:1/-1;width:100%;}.fsw{padding:20px 16px;}.fsw-results iframe{height:500px;}}
 </style>
 <div class="fsw">
   <div class="fsw-tabs">
@@ -213,27 +218,29 @@ a{text-decoration:none;}
     <label>Class:</label>
     <select id="fsw-class"><option value="Y">Economy</option><option value="C">Business</option><option value="F">First</option></select>
   </div>
+  <div class="fsw-loading" id="fsw-loading">&#9992; Searching for the best flights... please wait</div>
+  <div class="fsw-results" id="fsw-results">
+    <iframe id="fsw-iframe" src="" allowfullscreen></iframe>
+  </div>
 </div>
 <script>
 var fswTrip="roundtrip";
 var fswAirports=[
-  ["JFK","New York (John F. Kennedy)","US"],["LGA","New York (LaGuardia)","US"],["EWR","Newark","US"],["LAX","Los Angeles","US"],["ORD","Chicago O'Hare","US"],["MDW","Chicago Midway","US"],["ATL","Atlanta","US"],["DFW","Dallas/Fort Worth","US"],["DEN","Denver","US"],["SFO","San Francisco","US"],["SEA","Seattle","US"],["LAS","Las Vegas","US"],["MIA","Miami","US"],["FLL","Fort Lauderdale","US"],["MCO","Orlando","US"],["BOS","Boston","US"],["PHX","Phoenix","US"],["IAH","Houston Intercontinental","US"],["HOU","Houston Hobby","US"],["MSP","Minneapolis","US"],["DTW","Detroit","US"],["PHL","Philadelphia","US"],["CLT","Charlotte","US"],["SLC","Salt Lake City","US"],["BWI","Baltimore","US"],["DCA","Washington Reagan","US"],["IAD","Washington Dulles","US"],["PDX","Portland","US"],["SAN","San Diego","US"],["TPA","Tampa","US"],["HNL","Honolulu","US"],["ANC","Anchorage","US"],["NYC","New York (All)","US"],["CHI","Chicago (All)","US"],["WAS","Washington DC (All)","US"],["LON","London (All)","UK"],["LHR","London Heathrow","UK"],["LGW","London Gatwick","UK"],["STN","London Stansted","UK"],["CDG","Paris Charles de Gaulle","FR"],["ORY","Paris Orly","FR"],["PAR","Paris (All)","FR"],["AMS","Amsterdam","NL"],["FRA","Frankfurt","DE"],["MUC","Munich","DE"],["BER","Berlin","DE"],["MAD","Madrid","ES"],["BCN","Barcelona","ES"],["FCO","Rome Fiumicino","IT"],["MXP","Milan Malpensa","IT"],["ZRH","Zurich","CH"],["VIE","Vienna","AT"],["BRU","Brussels","BE"],["CPH","Copenhagen","DK"],["ARN","Stockholm","SE"],["HEL","Helsinki","FI"],["OSL","Oslo","NO"],["DUB","Dublin","IE"],["LIS","Lisbon","PT"],["ATH","Athens","GR"],["IST","Istanbul","TR"],["DXB","Dubai","AE"],["AUH","Abu Dhabi","AE"],["DOH","Doha","QA"],["KWI","Kuwait City","KW"],["RUH","Riyadh","SA"],["JED","Jeddah","SA"],["BOM","Mumbai","IN"],["DEL","Delhi","IN"],["BLR","Bangalore","IN"],["MAA","Chennai","IN"],["CCU","Kolkata","IN"],["HYD","Hyderabad","IN"],["AMD","Ahmedabad","IN"],["COK","Kochi","IN"],["PNQ","Pune","IN"],["SIN","Singapore","SG"],["KUL","Kuala Lumpur","MY"],["BKK","Bangkok Suvarnabhumi","TH"],["DMK","Bangkok Don Mueang","TH"],["CGK","Jakarta","ID"],["MNL","Manila","PH"],["SGN","Ho Chi Minh City","VN"],["HAN","Hanoi","VN"],["PEK","Beijing","CN"],["PVG","Shanghai Pudong","CN"],["CAN","Guangzhou","CN"],["HKG","Hong Kong","HK"],["ICN","Seoul Incheon","KR"],["NRT","Tokyo Narita","JP"],["HND","Tokyo Haneda","JP"],["KIX","Osaka","JP"],["SYD","Sydney","AU"],["MEL","Melbourne","AU"],["BNE","Brisbane","AU"],["PER","Perth","AU"],["AKL","Auckland","NZ"],["YYZ","Toronto","CA"],["YVR","Vancouver","CA"],["YUL","Montreal","CA"],["YYC","Calgary","CA"],["GRU","Sao Paulo","BR"],["GIG","Rio de Janeiro","BR"],["EZE","Buenos Aires","AR"],["BOG","Bogota","CO"],["LIM","Lima","PE"],["MEX","Mexico City","MX"],["CUN","Cancun","MX"],["JNB","Johannesburg","ZA"],["CPT","Cape Town","ZA"],["NBO","Nairobi","KE"],["CAI","Cairo","EG"],["CMN","Casablanca","MA"],["ADD","Addis Ababa","ET"]
+  ["JFK","New York (JFK)","US"],["LGA","New York (LaGuardia)","US"],["EWR","Newark","US"],["LAX","Los Angeles","US"],["ORD","Chicago O'Hare","US"],["MDW","Chicago Midway","US"],["ATL","Atlanta","US"],["DFW","Dallas/Fort Worth","US"],["DEN","Denver","US"],["SFO","San Francisco","US"],["SEA","Seattle","US"],["LAS","Las Vegas","US"],["MIA","Miami","US"],["FLL","Fort Lauderdale","US"],["MCO","Orlando","US"],["BOS","Boston","US"],["PHX","Phoenix","US"],["IAH","Houston","US"],["MSP","Minneapolis","US"],["DTW","Detroit","US"],["PHL","Philadelphia","US"],["CLT","Charlotte","US"],["SLC","Salt Lake City","US"],["BWI","Baltimore","US"],["DCA","Washington Reagan","US"],["IAD","Washington Dulles","US"],["PDX","Portland","US"],["SAN","San Diego","US"],["TPA","Tampa","US"],["HNL","Honolulu","US"],["NYC","New York (All)","US"],["CHI","Chicago (All)","US"],["WAS","Washington DC (All)","US"],["LON","London (All)","UK"],["LHR","London Heathrow","UK"],["LGW","London Gatwick","UK"],["STN","London Stansted","UK"],["CDG","Paris CDG","FR"],["ORY","Paris Orly","FR"],["PAR","Paris (All)","FR"],["AMS","Amsterdam","NL"],["FRA","Frankfurt","DE"],["MUC","Munich","DE"],["BER","Berlin","DE"],["MAD","Madrid","ES"],["BCN","Barcelona","ES"],["FCO","Rome","IT"],["MXP","Milan","IT"],["ZRH","Zurich","CH"],["VIE","Vienna","AT"],["BRU","Brussels","BE"],["CPH","Copenhagen","DK"],["ARN","Stockholm","SE"],["HEL","Helsinki","FI"],["OSL","Oslo","NO"],["DUB","Dublin","IE"],["LIS","Lisbon","PT"],["ATH","Athens","GR"],["IST","Istanbul","TR"],["DXB","Dubai","AE"],["AUH","Abu Dhabi","AE"],["DOH","Doha","QA"],["BOM","Mumbai","IN"],["DEL","Delhi","IN"],["BLR","Bangalore","IN"],["MAA","Chennai","IN"],["CCU","Kolkata","IN"],["HYD","Hyderabad","IN"],["COK","Kochi","IN"],["SIN","Singapore","SG"],["KUL","Kuala Lumpur","MY"],["BKK","Bangkok","TH"],["CGK","Jakarta","ID"],["MNL","Manila","PH"],["SGN","Ho Chi Minh City","VN"],["HAN","Hanoi","VN"],["PEK","Beijing","CN"],["PVG","Shanghai","CN"],["HKG","Hong Kong","HK"],["ICN","Seoul","KR"],["NRT","Tokyo Narita","JP"],["HND","Tokyo Haneda","JP"],["KIX","Osaka","JP"],["SYD","Sydney","AU"],["MEL","Melbourne","AU"],["BNE","Brisbane","AU"],["PER","Perth","AU"],["AKL","Auckland","NZ"],["YYZ","Toronto","CA"],["YVR","Vancouver","CA"],["YUL","Montreal","CA"],["GRU","Sao Paulo","BR"],["EZE","Buenos Aires","AR"],["BOG","Bogota","CO"],["LIM","Lima","PE"],["MEX","Mexico City","MX"],["CUN","Cancun","MX"],["JNB","Johannesburg","ZA"],["CPT","Cape Town","ZA"],["NBO","Nairobi","KE"],["CAI","Cairo","EG"]
 ];
 function fswAC(inp,listId,codeId){
   var q=inp.value.toLowerCase().trim();
   var list=document.getElementById(listId);
   if(q.length<2){list.classList.remove("open");return;}
-  var matches=fswAirports.filter(function(a){return a[0].toLowerCase().includes(q)||a[1].toLowerCase().includes(q)||a[2].toLowerCase().includes(q);}).slice(0,8);
+  var matches=fswAirports.filter(function(a){return a[0].toLowerCase().includes(q)||a[1].toLowerCase().includes(q);}).slice(0,8);
   if(!matches.length){list.classList.remove("open");return;}
-  list.innerHTML=matches.map(function(a){return'<div class="ac-item" onclick="fswPick(\''+(listId)+'\',\''+(codeId)+'\',\''+a[0]+'\',\''+a[1].replace(/\'/g,"")+'\')">'+'<span class="ac-code">'+a[0]+'</span><span class="ac-name">'+a[1]+' '+a[2]+'</span></div>';}).join("");
+  list.innerHTML=matches.map(function(a){return'<div class="ac-item" onclick="fswPick(\''+(listId)+'\',\''+(codeId)+'\',\''+a[0]+'\',\''+a[1].replace(/\'/g,"")+'\')">'+'<span class="ac-code">'+a[0]+'</span><span class="ac-name">'+a[1]+', '+a[2]+'</span></div>';}).join("");
   list.classList.add("open");
 }
 function fswPick(listId,codeId,code,name){
-  var list=document.getElementById(listId);
-  var txtId=listId.replace("-list","-txt");
-  document.getElementById(txtId).value=name+" ("+code+")";
+  document.getElementById(listId.replace("-list","-txt")).value=name+" ("+code+")";
   document.getElementById(codeId).value=code;
-  list.classList.remove("open");
+  document.getElementById(listId).classList.remove("open");
 }
 document.addEventListener("click",function(e){if(!e.target.closest(".fsw-field")){document.querySelectorAll(".ac-list").forEach(function(l){l.classList.remove("open");});}});
 function fswSetTab(t,el){fswTrip=t;document.querySelectorAll(".fsw-tab").forEach(function(b){b.classList.remove("active");});el.classList.add("active");document.getElementById("fsw-return-wrap").style.display=t==="oneway"?"none":"";}
@@ -243,13 +250,17 @@ function fswSearch(){
   var dep=document.getElementById("fsw-depart").value;
   var ret=document.getElementById("fsw-return").value;
   var adults=document.getElementById("fsw-adults").value;
-  var cls=document.getElementById("fsw-class").value;
   if(!o||!d||!dep){alert("Please fill in From, To, and Depart date.");return;}
-  var df=dep.replace(/-/g,"");
-  var url;
-  if(fswTrip==="roundtrip"&&ret){var rf=ret.replace(/-/g,"");url="https://www.aviasales.com/search/"+o+df+d+rf+adults+cls+"0?marker=711217";}
-  else{url="https://www.aviasales.com/search/"+o+df+d+adults+cls+"1?marker=711217";}
-  window.open(url,"_blank");
+  var url="https://search.jetradar.com/?origin="+o+"&destination="+d+"&depart_date="+dep+"&adults="+adults+"&marker=711217&locale=en";
+  if(fswTrip==="roundtrip"&&ret){url+="&return_date="+ret;}
+  document.getElementById("fsw-loading").classList.add("visible");
+  document.getElementById("fsw-results").classList.remove("visible");
+  document.getElementById("fsw-iframe").src=url;
+  document.getElementById("fsw-iframe").onload=function(){
+    document.getElementById("fsw-loading").classList.remove("visible");
+    document.getElementById("fsw-results").classList.add("visible");
+    document.getElementById("fsw-results").scrollIntoView({behavior:"smooth",block:"start"});
+  };
 }
 (function(){var t=new Date();var dep=new Date(t);dep.setDate(dep.getDate()+14);var ret=new Date(t);ret.setDate(ret.getDate()+21);function fmt(d){return d.toISOString().split("T")[0];}document.getElementById("fsw-depart").value=fmt(dep);document.getElementById("fsw-return").value=fmt(ret);})();
 </script>
